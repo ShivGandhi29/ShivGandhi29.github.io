@@ -4,31 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prototypes — Shiv Gandhi</title>
+<meta name="description" content="Ideas captured on the go, auto-scaffolded and shipped by an automation pipeline.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💡</text></svg>">
 <style>
   :root {
-    --bg: #f7f7f5;
+    --bg: #f7f6f3;
     --surface: #ffffff;
-    --border: #e5e3de;
+    --surface-2: #f1efe9;
+    --border: #e6e3db;
     --text: #1c1b19;
     --text-dim: #6b6863;
+    --text-faint: #918d84;
     --accent: #b45309;
+    --accent-2: #9a3412;
     --accent-bg: #fef3e2;
-    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 8px rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 2px rgba(28,27,25,0.05);
+    --shadow-md: 0 4px 16px rgba(28,27,25,0.08);
+    --shadow-lg: 0 12px 32px rgba(28,27,25,0.12);
+    --skeleton: linear-gradient(90deg, #ece9e2 25%, #e2ded4 37%, #ece9e2 63%);
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161513;
-      --surface: #201f1c;
-      --border: #34322d;
-      --text: #f2f0ec;
-      --text-dim: #a7a39b;
+    :root:not([data-theme="light"]) {
+      --bg: #15140f;
+      --surface: #1e1c17;
+      --surface-2: #262319;
+      --border: #33301f;
+      --text: #f3f1ea;
+      --text-dim: #a8a396;
+      --text-faint: #6e6a5d;
       --accent: #f0a860;
-      --accent-bg: #2c2115;
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 12px rgba(0,0,0,0.25);
+      --accent-2: #f6bd82;
+      --accent-bg: #2c2010;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.45);
+      --skeleton: linear-gradient(90deg, #262319 25%, #302c1e 37%, #262319 63%);
     }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15140f;
+    --surface: #1e1c17;
+    --surface-2: #262319;
+    --border: #33301f;
+    --text: #f3f1ea;
+    --text-dim: #a8a396;
+    --text-faint: #6e6a5d;
+    --accent: #f0a860;
+    --accent-2: #f6bd82;
+    --accent-bg: #2c2010;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,0.45);
+    --skeleton: linear-gradient(90deg, #262319 25%, #302c1e 37%, #262319 63%);
   }
 
   * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
   body {
     margin: 0;
     background: var(--bg);
@@ -36,27 +67,120 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
+
   .wrap {
-    max-width: 960px;
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 3rem 1.5rem 5rem;
+    padding: 0 1.5rem 5rem;
   }
-  header {
-    margin-bottom: 2.5rem;
+
+  /* ---- Hero ---- */
+  .hero {
+    padding: 4.5rem 0 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
   }
-  header h1 {
-    font-size: 1.9rem;
-    margin: 0 0 0.35rem;
-    letter-spacing: -0.01em;
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    background: var(--surface-2);
+    flex-shrink: 0;
   }
-  header p {
+  .hero-text h1 {
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .hero-text p {
     margin: 0;
     color: var(--text-dim);
-    font-size: 0.98rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 46ch;
   }
-  header a { color: var(--accent); text-decoration: none; }
-  header a:hover { text-decoration: underline; }
+  .hero-text a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .hero-text a:hover { text-decoration: underline; }
+
+  .stats {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 0 2.5rem;
+    padding: 1.1rem 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat .num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .stat .label {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.1rem;
+  }
+
+  /* ---- Toolbar ---- */
+  .toolbar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .search {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    padding: 0.65rem 0.9rem 0.65rem 2.2rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.92rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+  .search svg {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-faint);
+    pointer-events: none;
+  }
+  .sort-btn {
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .sort-btn:hover { color: var(--text); border-color: var(--text-faint); }
 
   #status {
     color: var(--text-dim);
@@ -64,44 +188,71 @@
     padding: 1rem 0;
   }
 
+  /* ---- Grid & cards ---- */
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.1rem;
   }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: var(--shadow);
+    border-radius: 14px;
+    padding: 1.4rem;
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    animation: rise 0.4s ease backwards;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+  }
+  .card .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .card .date {
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .card .badge-new {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
   }
   .card h2 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.35;
-  }
-  .card .date {
-    font-size: 0.78rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: -0.01em;
   }
   .card p {
     margin: 0;
-    font-size: 0.88rem;
+    font-size: 0.87rem;
     color: var(--text-dim);
-    line-height: 1.5;
+    line-height: 1.55;
     flex-grow: 1;
   }
   .card .links {
     display: flex;
     gap: 0.6rem;
-    margin-top: 0.4rem;
+    margin-top: 0.2rem;
     flex-wrap: wrap;
   }
   .btn {
@@ -111,53 +262,177 @@
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
-    padding: 0.4rem 0.7rem;
-    border-radius: 7px;
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
     border: 1px solid var(--border);
     color: var(--text);
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
   .btn.primary {
     background: var(--accent-bg);
-    color: var(--accent);
+    color: var(--accent-2);
     border-color: transparent;
   }
-  .btn:hover { filter: brightness(0.97); }
+  .btn:hover { border-color: var(--text-faint); }
+  .btn.primary:hover { filter: brightness(0.96); }
+  :root[data-theme="dark"] .btn.primary:hover { filter: brightness(1.15); }
   @media (prefers-color-scheme: dark) {
-    .btn:hover { filter: brightness(1.15); }
+    :root:not([data-theme="light"]) .btn.primary:hover { filter: brightness(1.15); }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Skeletons ---- */
+  .skeleton-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .sk-line {
+    height: 0.7rem;
+    border-radius: 6px;
+    background: var(--skeleton);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+  }
+  .sk-line.w1 { width: 40%; height: 0.6rem; }
+  .sk-line.w2 { width: 75%; height: 1rem; }
+  .sk-line.w3 { width: 100%; }
+  .sk-line.w4 { width: 90%; }
+  @keyframes shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
   }
 
   .empty, .error {
     color: var(--text-dim);
     font-size: 0.92rem;
-    padding: 2rem 0;
+    padding: 3rem 0;
+    text-align: center;
   }
+  .empty a, .error a { color: var(--accent); }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+  footer a { color: inherit; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <h1>Prototypes</h1>
-      <p>Ideas captured on the go, auto-scaffolded and shipped by an automation pipeline.
-        Source lives at <a href="https://github.com/ShivGandhi29" target="_blank" rel="noopener">github.com/ShivGandhi29</a>.</p>
-    </header>
-    <div id="status">Loading prototypes…</div>
-    <div class="grid" id="grid"></div>
+    <div class="hero">
+      <img class="avatar" id="avatar" alt="" width="64" height="64">
+      <div class="hero-text">
+        <h1>Prototypes</h1>
+        <p>Ideas captured on the go, auto-scaffolded and shipped by an automation pipeline.
+          Source at <a href="https://github.com/ShivGandhi29" target="_blank" rel="noopener">github.com/ShivGandhi29</a>.</p>
+      </div>
+    </div>
+
+    <div class="stats" id="stats" hidden>
+      <div class="stat"><div class="num" id="stat-count">0</div><div class="label">Prototypes</div></div>
+      <div class="stat"><div class="num" id="stat-latest">—</div><div class="label">Latest</div></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="search-input" placeholder="Search prototypes…" autocomplete="off">
+      </div>
+      <button class="sort-btn" id="sort-btn" type="button">Newest first</button>
+    </div>
+
+    <div id="status">
+      <div class="grid" id="skeleton-grid"></div>
+    </div>
+    <div class="grid" id="grid" hidden></div>
+
+    <footer>
+      Auto-generated portfolio · updates whenever a new prototype ships
+    </footer>
   </div>
 
 <script>
   const USERNAME = "ShivGandhi29";
   const TOPIC = "prototype";
+  let allPrototypes = [];
+  let sortNewestFirst = true;
+
+  document.getElementById("avatar").src = `https://github.com/${USERNAME}.png?size=128`;
+
+  // Render skeleton placeholders while loading
+  const skeletonGrid = document.getElementById("skeleton-grid");
+  skeletonGrid.innerHTML = Array.from({ length: 6 }).map(() => `
+    <div class="skeleton-card">
+      <div class="sk-line w1"></div>
+      <div class="sk-line w2"></div>
+      <div class="sk-line w3"></div>
+      <div class="sk-line w4"></div>
+    </div>`).join("");
 
   function titleFromRepoName(name) {
-    // e.g. "2026-08-14-pomodoro-timer" -> "Pomodoro Timer", "14 Aug 2026"
     const m = name.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/);
-    if (!m) return { title: name, date: "" };
+    if (!m) return { title: name, date: "", dateObj: new Date(0) };
     const [, y, mo, d, rest] = m;
     const title = rest.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
     const dateObj = new Date(`${y}-${mo}-${d}T00:00:00`);
     const date = dateObj.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-    return { title, date };
+    return { title, date, dateObj };
   }
+
+  function render(list) {
+    const gridEl = document.getElementById("grid");
+    if (list.length === 0) {
+      gridEl.innerHTML = '<div class="empty">No prototypes match that search.</div>';
+      return;
+    }
+    const newestTs = Math.max(...allPrototypes.map(p => p.dateObj.getTime()));
+    gridEl.innerHTML = list.map((r, i) => {
+      const demoUrl = `https://${USERNAME.toLowerCase()}.github.io/${r.name}/`;
+      const isNew = r.dateObj.getTime() === newestTs;
+      return `
+        <a class="card" href="${demoUrl}" target="_blank" rel="noopener" style="animation-delay:${Math.min(i * 35, 350)}ms">
+          <div class="top-row">
+            <span class="date">${r.date}</span>
+            ${isNew ? '<span class="badge-new">Latest</span>' : ''}
+          </div>
+          <h2>${r.title}</h2>
+          <p>${r.description || "No description yet."}</p>
+          <div class="links">
+            <span class="btn primary">Live demo</span>
+            <a class="btn" href="${r.html_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Code</a>
+          </div>
+        </a>`;
+    }).join("");
+  }
+
+  function applyFilterAndSort() {
+    const q = document.getElementById("search-input").value.trim().toLowerCase();
+    let list = allPrototypes.filter(p =>
+      p.title.toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q)
+    );
+    list.sort((a, b) => sortNewestFirst ? b.dateObj - a.dateObj : a.dateObj - b.dateObj);
+    render(list);
+  }
+
+  document.getElementById("search-input").addEventListener("input", applyFilterAndSort);
+  document.getElementById("sort-btn").addEventListener("click", () => {
+    sortNewestFirst = !sortNewestFirst;
+    document.getElementById("sort-btn").textContent = sortNewestFirst ? "Newest first" : "Oldest first";
+    applyFilterAndSort();
+  });
 
   async function loadPrototypes() {
     const statusEl = document.getElementById("status");
@@ -168,32 +443,30 @@
       });
       if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
       const repos = await res.json();
-      const prototypes = repos.filter(r => Array.isArray(r.topics) && r.topics.includes(TOPIC));
+      const prototypes = repos
+        .filter(r => Array.isArray(r.topics) && r.topics.includes(TOPIC))
+        .map(r => ({ ...r, ...titleFromRepoName(r.name) }));
+
+      statusEl.hidden = true;
+      gridEl.hidden = false;
 
       if (prototypes.length === 0) {
-        statusEl.textContent = "";
         gridEl.innerHTML = '<div class="empty">No prototypes yet — drop an idea in the inbox and check back.</div>';
         return;
       }
 
-      statusEl.remove();
-      gridEl.innerHTML = prototypes.map(r => {
-        const { title, date } = titleFromRepoName(r.name);
-        const demoUrl = `https://${USERNAME.toLowerCase()}.github.io/${r.name}/`;
-        const desc = r.description ? r.description : "";
-        return `
-          <div class="card">
-            <div class="date">${date}</div>
-            <h2>${title}</h2>
-            <p>${desc}</p>
-            <div class="links">
-              <a class="btn primary" href="${demoUrl}" target="_blank" rel="noopener">Live demo</a>
-              <a class="btn" href="${r.html_url}" target="_blank" rel="noopener">Code</a>
-            </div>
-          </div>`;
-      }).join("");
+      allPrototypes = prototypes;
+
+      const statsEl = document.getElementById("stats");
+      statsEl.hidden = false;
+      document.getElementById("stat-count").textContent = prototypes.length;
+      const latest = prototypes.reduce((a, b) => (a.dateObj > b.dateObj ? a : b));
+      document.getElementById("stat-latest").textContent = latest.date;
+
+      applyFilterAndSort();
     } catch (err) {
-      statusEl.textContent = "";
+      statusEl.hidden = true;
+      gridEl.hidden = false;
       gridEl.innerHTML = `<div class="error">Couldn't load prototypes right now (${err.message}). Try refreshing, or browse them directly on <a href="https://github.com/${USERNAME}?tab=repositories&q=topic%3A${TOPIC}" target="_blank" rel="noopener">GitHub</a>.</div>`;
     }
   }
