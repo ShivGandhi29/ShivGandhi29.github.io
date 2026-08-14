@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototypes — Shiv Gandhi</title>
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --border: #e5e3de;
+    --text: #1c1b19;
+    --text-dim: #6b6863;
+    --accent: #b45309;
+    --accent-bg: #fef3e2;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 8px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161513;
+      --surface: #201f1c;
+      --border: #34322d;
+      --text: #f2f0ec;
+      --text-dim: #a7a39b;
+      --accent: #f0a860;
+      --accent-bg: #2c2115;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 12px rgba(0,0,0,0.25);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  header {
+    margin-bottom: 2.5rem;
+  }
+  header h1 {
+    font-size: 1.9rem;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  header a { color: var(--accent); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+
+  #status {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    padding: 1rem 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .card h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+  .card .date {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .card p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  .card .links {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.4rem 0.7rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn.primary {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-color: transparent;
+  }
+  .btn:hover { filter: brightness(0.97); }
+  @media (prefers-color-scheme: dark) {
+    .btn:hover { filter: brightness(1.15); }
+  }
+
+  .empty, .error {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    padding: 2rem 0;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Prototypes</h1>
+      <p>Ideas captured on the go, auto-scaffolded and shipped by an automation pipeline.
+        Source lives at <a href="https://github.com/ShivGandhi29" target="_blank" rel="noopener">github.com/ShivGandhi29</a>.</p>
+    </header>
+    <div id="status">Loading prototypes…</div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+<script>
+  const USERNAME = "ShivGandhi29";
+  const TOPIC = "prototype";
+
+  function titleFromRepoName(name) {
+    // e.g. "2026-08-14-pomodoro-timer" -> "Pomodoro Timer", "14 Aug 2026"
+    const m = name.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/);
+    if (!m) return { title: name, date: "" };
+    const [, y, mo, d, rest] = m;
+    const title = rest.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    const dateObj = new Date(`${y}-${mo}-${d}T00:00:00`);
+    const date = dateObj.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+    return { title, date };
+  }
+
+  async function loadPrototypes() {
+    const statusEl = document.getElementById("status");
+    const gridEl = document.getElementById("grid");
+    try {
+      const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=created&direction=desc`, {
+        headers: { Accept: "application/vnd.github+json" }
+      });
+      if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+      const repos = await res.json();
+      const prototypes = repos.filter(r => Array.isArray(r.topics) && r.topics.includes(TOPIC));
+
+      if (prototypes.length === 0) {
+        statusEl.textContent = "";
+        gridEl.innerHTML = '<div class="empty">No prototypes yet — drop an idea in the inbox and check back.</div>';
+        return;
+      }
+
+      statusEl.remove();
+      gridEl.innerHTML = prototypes.map(r => {
+        const { title, date } = titleFromRepoName(r.name);
+        const demoUrl = `https://${USERNAME.toLowerCase()}.github.io/${r.name}/`;
+        const desc = r.description ? r.description : "";
+        return `
+          <div class="card">
+            <div class="date">${date}</div>
+            <h2>${title}</h2>
+            <p>${desc}</p>
+            <div class="links">
+              <a class="btn primary" href="${demoUrl}" target="_blank" rel="noopener">Live demo</a>
+              <a class="btn" href="${r.html_url}" target="_blank" rel="noopener">Code</a>
+            </div>
+          </div>`;
+      }).join("");
+    } catch (err) {
+      statusEl.textContent = "";
+      gridEl.innerHTML = `<div class="error">Couldn't load prototypes right now (${err.message}). Try refreshing, or browse them directly on <a href="https://github.com/${USERNAME}?tab=repositories&q=topic%3A${TOPIC}" target="_blank" rel="noopener">GitHub</a>.</div>`;
+    }
+  }
+
+  loadPrototypes();
+</script>
+</body>
+</html>
