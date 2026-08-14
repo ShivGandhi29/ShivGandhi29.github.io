@@ -241,6 +241,7 @@
     border-radius: 14px;
     padding: 1.5rem;
     box-shadow: var(--shadow-md);
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -458,12 +459,15 @@
       gridEl.innerHTML = '<div class="empty">No prototypes match that search.</div>';
       return;
     }
-    const newestTs = Math.max(...allPrototypes.map(p => p.dateObj.getTime()));
+    // Use the real repo creation timestamp for "Latest", not the coarse
+    // per-day date parsed from the folder name (multiple prototypes can
+    // share the same calendar day).
+    const newestCreated = Math.max(...allPrototypes.map(p => new Date(p.created_at).getTime()));
     gridEl.innerHTML = list.map((r, i) => {
       const demoUrl = `https://${USERNAME.toLowerCase()}.github.io/${r.name}/`;
-      const isNew = r.dateObj.getTime() === newestTs;
+      const isNew = new Date(r.created_at).getTime() === newestCreated;
       return `
-        <a class="card" href="${demoUrl}" target="_blank" rel="noopener" style="animation-delay:${Math.min(i * 35, 350)}ms">
+        <div class="card" style="animation-delay:${Math.min(i * 35, 350)}ms" onclick="window.open('${demoUrl}','_blank','noopener')">
           <div class="top-row">
             <span class="date">${r.date}</span>
             ${isNew ? '<span class="badge-new">Latest</span>' : ''}
@@ -471,10 +475,10 @@
           <h2>${r.title}</h2>
           <p>${r.description || "No description yet."}</p>
           <div class="links">
-            <span class="view-demo">View demo <span class="arrow">→</span></span>
+            <a class="view-demo" href="${demoUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View demo <span class="arrow">→</span></a>
             <a class="code-link" href="${r.html_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Code</a>
           </div>
-        </a>`;
+        </div>`;
     }).join("");
   }
 
